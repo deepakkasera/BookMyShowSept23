@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@Entity
+@Entity(name = "shows") // Show is a reserved keyword in MySQL.
 public class Show extends BaseModel {
     @ManyToOne
     private Movie movie;
@@ -25,6 +25,15 @@ public class Show extends BaseModel {
     @ElementCollection
     private List<Feature> features;
 }
+
+/*
+1. Cardinality Mapping for all the attributes.
+2. Build the code.
+3. First Requirement : User should be able to book the ticket.
+   [If more than one user is trying to book the same seat for a show then only one
+   user should be allowed to book -> Handle Concurrency]
+
+ */
 
 /*
 
