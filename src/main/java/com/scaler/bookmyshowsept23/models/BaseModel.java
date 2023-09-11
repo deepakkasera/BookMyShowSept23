@@ -1,4 +1,4 @@
-package models;
+package com.scaler.bookmyshowsept23.models;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

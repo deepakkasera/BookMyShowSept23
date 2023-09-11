@@ -1,10 +1,8 @@
-package models;
+package com.scaler.bookmyshowsept23.models;
 
 import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter
