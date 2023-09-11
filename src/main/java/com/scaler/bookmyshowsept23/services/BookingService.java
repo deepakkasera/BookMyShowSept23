@@ -1,18 +1,19 @@
 package com.scaler.bookmyshowsept23.services;
 
-import com.scaler.bookmyshowsept23.dto.BookMovieResponseDto;
 import com.scaler.bookmyshowsept23.exceptions.ShowNotFoundException;
 import com.scaler.bookmyshowsept23.exceptions.ShowSeatNotAvailableException;
 import com.scaler.bookmyshowsept23.exceptions.UserNotFoundException;
 import com.scaler.bookmyshowsept23.models.*;
+import com.scaler.bookmyshowsept23.repositories.BookingRepository;
 import com.scaler.bookmyshowsept23.repositories.ShowRepository;
 import com.scaler.bookmyshowsept23.repositories.ShowSeatRepository;
 import com.scaler.bookmyshowsept23.repositories.UserRepository;
-import org.springframework.boot.autoconfigure.liquibase.LiquibaseDataSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,13 +22,19 @@ public class BookingService { //@Service //@Controller //@Repository //@Componen
     private UserRepository userRepository;
     private ShowRepository showRepository;
     private ShowSeatRepository showSeatRepository;
+    private BookingRepository bookingRepository;
+    private PriceCalculatorService priceCalculatorService;
 
     public BookingService(UserRepository userRepository,
                           ShowRepository showRepository,
-                          ShowSeatRepository showSeatRepository) {
+                          ShowSeatRepository showSeatRepository,
+                          BookingRepository bookingRepository,
+                          PriceCalculatorService priceCalculatorService) {
         this.userRepository = userRepository;
         this.showRepository = showRepository;
         this.showSeatRepository = showSeatRepository;
+        this.bookingRepository = bookingRepository;
+        this.priceCalculatorService = priceCalculatorService;
     }
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
@@ -70,12 +77,26 @@ public class BookingService { //@Service //@Controller //@Repository //@Componen
             }
         }
 
+        List<ShowSeat> bookedShowSeats = new ArrayList<>();
         //6. If all are available, then change the status to be LOCKED.
         for (ShowSeat showSeat : showSeats) {
             showSeat.setShowSeatStatus(ShowSeatStatus.LOCKED);
             //7. Change the status in DB as well.
-
+            bookedShowSeats.add(showSeatRepository.save(showSeat));
         }
 
+        //8. Create the Booking Object, and store it in DB.
+        Booking booking = new Booking();
+        booking.setUser(bookedBy);
+        booking.setBookingStatus(BookingStatus.IN_PROGRESS);
+        booking.setPayments(new ArrayList<>());
+        booking.setShowSeats(bookedShowSeats);
+        booking.setCreatedAt(new Date());
+        booking.setLastModifiedAt(new Date());
+        booking.setAmount(priceCalculatorService.calculateBookingPrice(bookedShowSeats, show));
+
+        return bookingRepository.save(booking);
+
+        // ------LOCK WILL BE RELEASED------
     }
 }

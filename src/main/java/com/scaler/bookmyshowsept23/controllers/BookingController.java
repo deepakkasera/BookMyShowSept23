@@ -3,20 +3,36 @@ package com.scaler.bookmyshowsept23.controllers;
 import com.scaler.bookmyshowsept23.dto.BookMovieRequestDto;
 import com.scaler.bookmyshowsept23.dto.BookMovieResponseDto;
 import com.scaler.bookmyshowsept23.models.Booking;
-import org.springframework.stereotype.Component;
+import com.scaler.bookmyshowsept23.models.ResponseStatus;
+import com.scaler.bookmyshowsept23.services.BookingService;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
-
-import java.awt.print.Book;
-import java.util.List;
 
 @Controller
 public class BookingController { //Waiter.
+    private BookingService bookingService;
+    public BookingController(BookingService bookingService) {
+        this.bookingService = bookingService;
+    }
+
     public BookMovieResponseDto bookMovie(BookMovieRequestDto bookMovieRequestDto) {
-        return null;
+        BookMovieResponseDto response = new BookMovieResponseDto();
+
+        try {
+            Booking booking = bookingService.bookMovie(bookMovieRequestDto.getUserId(),
+                    bookMovieRequestDto.getShowId(),
+                    bookMovieRequestDto.getShowSeatIds());
+
+            response.setBookingId(booking.getId());
+            response.setResponseStatus(ResponseStatus.SUCCESS);
+            response.setAmount(booking.getAmount());
+        } catch (RuntimeException runtimeException) {
+            response.setResponseStatus(ResponseStatus.FAILURE);
+        }
+
+        return response;
     }
 
     public Booking cancelMovie() {
-
+        return null;
     }
 }
