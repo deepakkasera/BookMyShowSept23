@@ -96,7 +96,6 @@ public class BookingService { //@Service //@Controller //@Repository //@Componen
         booking.setAmount(priceCalculatorService.calculateBookingPrice(bookedShowSeats, show));
 
         return bookingRepository.save(booking);
-
         // ------LOCK WILL BE RELEASED------
     }
 }
