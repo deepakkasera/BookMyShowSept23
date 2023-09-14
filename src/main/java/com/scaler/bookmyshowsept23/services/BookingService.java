@@ -8,6 +8,7 @@ import com.scaler.bookmyshowsept23.repositories.BookingRepository;
 import com.scaler.bookmyshowsept23.repositories.ShowRepository;
 import com.scaler.bookmyshowsept23.repositories.ShowSeatRepository;
 import com.scaler.bookmyshowsept23.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,7 @@ public class BookingService { //@Service //@Controller //@Repository //@Componen
     private BookingRepository bookingRepository;
     private PriceCalculatorService priceCalculatorService;
 
+    @Autowired
     public BookingService(UserRepository userRepository,
                           ShowRepository showRepository,
                           ShowSeatRepository showSeatRepository,

@@ -5,11 +5,14 @@ import com.scaler.bookmyshowsept23.dto.BookMovieResponseDto;
 import com.scaler.bookmyshowsept23.models.Booking;
 import com.scaler.bookmyshowsept23.models.ResponseStatus;
 import com.scaler.bookmyshowsept23.services.BookingService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 @Controller
 public class BookingController { //Waiter.
     private BookingService bookingService;
+
+    @Autowired
     public BookingController(BookingService bookingService) {
         this.bookingService = bookingService;
     }

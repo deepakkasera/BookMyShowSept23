@@ -4,6 +4,7 @@ import com.scaler.bookmyshowsept23.models.Show;
 import com.scaler.bookmyshowsept23.models.ShowSeat;
 import com.scaler.bookmyshowsept23.models.ShowSeatType;
 import com.scaler.bookmyshowsept23.repositories.ShowSeatTypeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,6 +12,8 @@ import java.util.List;
 @Service
 public class PriceCalculatorService {
     private ShowSeatTypeRepository showSeatTypeRepository;
+
+    @Autowired
     public PriceCalculatorService(ShowSeatTypeRepository showSeatTypeRepository) {
         this.showSeatTypeRepository = showSeatTypeRepository;
     }
